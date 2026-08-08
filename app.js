@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Voice2Text AI - Speech to Text Engine (Georgian & Multi-language)
  * Powered by Web Speech API & HTML5 Web Audio API
  */
