@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ხმის ტექსტად გარდაქმნა (Speech to Text) - Antigravity</title>
+    <meta name="description" content="თანამედროვე ხმის ტექსტად გარდამქმნელი აპლიკაცია ქართული და საერთაშორისო ენების მხარდაჭერით.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Voice2Text AI</h1>
+                    <span class="badge">ქართული ენა (Georgian)</span>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <div class="lang-selector-wrapper">
+                    <i class="fa-solid fa-globe lang-icon"></i>
+                    <select id="languageSelect" aria-label="აირჩიეთ ენა">
+                        <option value="ka-GE" selected>🇬🇪 ქართული (Georgian)</option>
+                        <option value="en-US">🇺🇸 English (US)</option>
+                        <option value="en-GB">🇬🇧 English (UK)</option>
+                        <option value="ru-RU">🇷🇺 Русский (Russian)</option>
+                        <option value="de-DE">🇩🇪 Deutsch (German)</option>
+                        <option value="fr-FR">🇫🇷 Français (French)</option>
+                        <option value="es-ES">🇪🇸 Español (Spanish)</option>
+                        <option value="it-IT">🇮🇹 Italiano (Italian)</option>
+                        <option value="tr-TR">🇹🇷 Türkçe (Turkish)</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-content">
+            <!-- Recording & Control Card -->
+            <section class="control-card glass-panel">
+                <div class="visualizer-container">
+                    <canvas id="visualizer" width="600" height="90"></canvas>
+                    <div id="visualizerPlaceholder" class="visualizer-placeholder">
+                        <i class="fa-solid fa-wave-square"></i>
+                        <span>დააჭირეთ მიკროფონს საუბრის დასაწყებად</span>
+                    </div>
+                </div>
+
+                <div class="mic-status-bar">
+                    <div class="status-indicator">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText" class="status-text">მზადყოფნაშია</span>
+                    </div>
+                    <div class="timer" id="timerDisplay">00:00:00</div>
+                </div>
+
+                <div class="primary-controls">
+                    <button id="micBtn" class="btn-mic" aria-label="ჩაწერის დაწყება/შეჩერება">
+                        <div class="mic-pulse"></div>
+                        <i class="fa-solid fa-microphone mic-icon-main"></i>
+                    </button>
+                </div>
+
+                <div class="mic-hint" id="micHint">
+                    დააჭირეთ მიკროფონის ღილაკს და დაიწყეთ ლაპარაკი
+                </div>
+            </section>
+
+            <!-- Editor / Transcript Output Card -->
+            <section class="transcript-card glass-panel">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-lines"></i> გარდაქმნილი ტექსტი</h2>
+                    <div class="action-buttons">
+                        <button id="copyBtn" class="btn-action" title="ტექსტის კოპირება">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>კოპირება</span>
+                        </button>
+                        <button id="downloadBtn" class="btn-action" title="ფაილად ჩამოტვირთვა (.txt)">
+                            <i class="fa-solid fa-download"></i>
+                            <span>ჩამოტვირთვა</span>
+                        </button>
+                        <button id="speakBtn" class="btn-action" title="ტექსტის გახმოვანება">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>წაკითხვა</span>
+                        </button>
+                        <button id="clearBtn" class="btn-action btn-danger" title="ტექსტის გასუფთავება">
+                            <i class="fa-regular fa-trash-can"></i>
+                            <span>გასუფთავება</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="editor-wrapper">
+                    <textarea id="transcriptText" placeholder="თქვენი ნალაპარაკე ტექსტი გამოჩნდება აქ რეალურ დროში..." spellcheck="false"></textarea>
+                    <div id="interimBox" class="interim-preview" hidden>
+                        <span class="interim-label">ისმინება:</span>
+                        <span id="interimText" class="interim-content"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="stats-group">
+                        <div class="stat-item">
+                            <span class="stat-value" id="wordCount">0</span>
+                            <span class="stat-label">სიტყვა</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="charCount">0</span>
+                            <span class="stat-label">სიმბოლო</span>
+                        </div>
+                    </div>
+
+                    <div class="font-size-controls">
+                        <button id="fontDec" class="btn-icon-sm" title="ტექსტის დაპატარავება"><i class="fa-solid fa-minus"></i></button>
+                        <span id="fontSizeVal">16px</span>
+                        <button id="fontInc" class="btn-icon-sm" title="ტექსტის გაზრდა"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Instructions & Features Section -->
+        <footer class="app-instructions glass-panel">
+            <h3><i class="fa-solid fa-circle-info"></i> როგორ გამოვიყენოთ:</h3>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-info">
+                        <h4>მიკროფონის ნებართვა</h4>
+                        <p>დააჭირეთ მიკროფონის დიდ ღილაკს და ბრაუზერში დაადასტურეთ მიკროფონის წვდომა (Allow/დაშვება).</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-info">
+                        <h4>ლაპარაკი</h4>
+                        <p>ილაპარაკეთ გამართულად და მკაფიოდ. ტექსტი მყისიერად გამოჩნდება ეკრანზე.</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-info">
+                        <h4>შენახვა & კოპირება</h4>
+                        <p>შეგიძლიათ ტექსტის ჩასწორება, კოპირება ან ტექსტურ (.txt) ფაილად ჩამოტვირთვა.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
