@@ -1,2 +1,18 @@
-# voice2text-georgian
-Georgian Speech to Text Web Application built with Antigravity
+# Voice2Text AI 🎙️🇬🇪
+
+თანამედროვე, დახვეწილი ვებ-აპლიკაცია ქართული ხმის ტექსტად გარდაქმნისთვის (Speech to Text) რეალურ დროში.
+
+## 🚀 ფუნქციები
+- **ხმის ტექსტად გარდაქმნა (Real-time Speech Recognition)** - ქართული (`ka-GE`), ინგლისური, რუსული და სხვა ენების მხარდაჭერით.
+- **აუდიო ეკვალაიზერი (Audio Visualizer)** - ხმის ტალღების ანიმაცია რეალურ დროში.
+- **სტატისტიკა & ტაიმერი** - სიტყვების და სიმბოლოების ავტომატური დათვლა.
+- **ტექსტის ექსპორტი & კოპირება** - ერთი დაჭერით კოპირება ან `.txt` ფაილად ჩამოტვირთვა.
+- **ტექსტის გახმოვანება (Text-to-Speech)** - ნაწერი ტექსტის წაკითხვა.
+
+## 🛠️ ტექნოლოგიები
+- HTML5 / CSS3 (Glassmorphism design system)
+- JavaScript (Vanilla ES6+)
+- Web Speech API & Web Audio API
+
+## 🌐 ლოკალურად გაშვება
+უბრალოდ გახსენით `index.html` ფაილი ნებისმიერ თანამედროვე ბრაუზერში (Google Chrome ან Microsoft Edge).
